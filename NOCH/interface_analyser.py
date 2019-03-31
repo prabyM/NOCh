@@ -7,7 +7,7 @@ parser.add_argument("filepath", help="name of the show tech file")
 args = parser.parse_args()
 filelocation = args.filepath
 f = open(filelocation,'r')
-#print ('File Opened')
+
 
 interface_load = re.compile("\d{3}")
 
@@ -18,13 +18,12 @@ interface_error=[]
 
 for lines in f:
 
-
-    lines=lines.strip('\n')
+    lines = lines.strip('\n')
 
     if 'show interfaces' in lines:
         interface_config = 1
 
-    if 'line protocol is' in lines and (interface_config==1):
+    if 'line protocol is' in lines and (interface_config == 1):
         interfaces.append(lines.split(' ')[0])
         
     if 'reliability' in lines:
@@ -37,27 +36,27 @@ for lines in f:
 
         if txload > 175:
 
-            interface_error.append('Transmission on one or more interfaces are utilizing an increased percentage of bandwidth.Make sure that you have sufficent available bandwith for the interface.') 
+            interface_error.append('Transmission on one or more interfaces are utilizing an increased percentage of BW.'
+                                   'Make sure that you have sufficient available bandwidth for the interface.')
 
         if rxload > 175: 
             interface_error.append('Reception on One or more interfaces are utilizing an increased percentage of bandwidth.Make sure that you have sufficent available bandwith for the interface.')
             
         if reliability<255:
-            interface_error.append('One or more interaces have reduced reliability. There are chances that the interface has gone faulty. If the issue persist, change the hardware.')
+            interface_error.append('One or more interaces have reduced reliability. '
+                                   'There are chances that the interface has gone faulty. '
+                                   'If the issue persist, change the hardware.')
             
     if 'CRC' in lines:
-        #print "Entering CRC"
-        CRC =  (re.findall("\d{1,9} CRC,", lines))
-        if  (CRC):
+
+        CRC = (re.findall("\d{1,9} CRC,", lines))
+        if CRC:
             if int(CRC[0].split(' ')[0])>0:
-                print('CRC Errors found on one or more interfaces.These kind of errors occur when there is an issue with the cabling or the hardware of the NIC.')
+                print('CRC Errors found on one or more interfaces.'
+                      'These kind of errors occur when there is an issue with the cabling or the hardware of the NIC.')
 
-        
-
-
-
-    if 'show redundnacy' in lines:
-         interface_config = 0
+    if 'show redundancy' in lines:
+        interface_config = 0
              
 print("Errors found while checking interfaces\n\n")
 for errors in set(interface_error):
