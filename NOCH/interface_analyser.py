@@ -6,7 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("filepath", help="name of the show tech file")
 args = parser.parse_args()
 filelocation = args.filepath
-f = open(filelocation,'r')
+f = open(filelocation, 'r')
 
 
 interface_load = re.compile("\d{3}")
@@ -41,10 +41,10 @@ for lines in f:
 
         if rxload > 175: 
             interface_error.append('Reception on One or more interfaces are utilizing an increased percentage of bandwidth.'
-                                   'Make sure that you have sufficent available bandwith for the interface.')
+                                   'Make sure that you have sufficient available bandwith for the interface.')
             
         if reliability<255:
-            interface_error.append('One or more interaces have reduced reliability. '
+            interface_error.append('One or more interfaces have reduced reliability. '
                                    'There are chances that the interface has gone faulty. '
                                    'If the issue persist, change the hardware.')
             
@@ -54,7 +54,15 @@ for lines in f:
         if CRC:
             if int(CRC[0].split(' ')[0])>0:
                 interface_error.append('CRC Errors found on one or more interfaces.'
-                      'These kind of errors occur when there is an issue with the cabling or the hardware of the NIC.')
+                                       'These kind of errors occur when there is an issue with the cable or the HW.')
+    
+    if 'Total output drops' in lines:
+        output_drops_index = lines.rfind(':')+1
+        output_drops = int(lines[output_drops_index:])
+        if output_drops > 100:
+            interface_error.append('There are output drops on one or more interfaces.' 
+                                   'These drops are seen when the outgoing interface is overwhelmed by the LAN traffic.'
+                                   'Check the traffic coming from the LAN side')
 
     if 'show redundancy' in lines:
         interface_config = 0
