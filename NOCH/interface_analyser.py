@@ -40,7 +40,8 @@ for lines in f:
                                    'Make sure that you have sufficient available bandwidth for the interface.')
 
         if rxload > 175: 
-            interface_error.append('Reception on One or more interfaces are utilizing an increased percentage of bandwidth.Make sure that you have sufficent available bandwith for the interface.')
+            interface_error.append('Reception on One or more interfaces are utilizing an increased percentage of bandwidth.'
+                                   'Make sure that you have sufficent available bandwith for the interface.')
             
         if reliability<255:
             interface_error.append('One or more interaces have reduced reliability. '
@@ -52,7 +53,7 @@ for lines in f:
         CRC = (re.findall("\d{1,9} CRC,", lines))
         if CRC:
             if int(CRC[0].split(' ')[0])>0:
-                print('CRC Errors found on one or more interfaces.'
+                interface_error.append('CRC Errors found on one or more interfaces.'
                       'These kind of errors occur when there is an issue with the cabling or the hardware of the NIC.')
 
     if 'show redundancy' in lines:
